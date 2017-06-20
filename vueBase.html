@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>vue 1</title>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+	<div id="app">
+		<!-- 模板语法 -->
+		<p>{{message}}</p>
+		<!-- bind 绑定属性 -->
+		<p v-bind:title="message">绑定属性值</p>
+	
+	</div>
+	<script>
+	var Vm=new Vue({
+		el:"#app",
+		data:{
+			message:'你好将来'
+		}
+	})
+	</script>
+</body>
+</html>
