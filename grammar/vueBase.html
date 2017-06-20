@@ -27,6 +27,13 @@
 		<!-- 条件指令-->
 		<p v-if="seen">现在你看到我了</p>
 		<p v-show="seen">我是一直存在的</p>
+		<template v-if="seen">
+			<h1>你好</h1>
+			<p>还好吧</p>
+			<p>明天怎么样</p>
+		</template>
+		<p v-if="Math.random() > 0.2">{{Math.random()}}</p>
+		<p v-else>没有超过0.2</p>
 
 		<!-- 循环指令 -->
 		<table>
@@ -35,45 +42,83 @@
 				<td>{{item.age}}</td>
 				<td>{{item.sex}}</td>
 			</tr>
-		</table>	
+		</table>
+		<ul>
+			<li v-for="(item,key,index) in obj">{{index}}.{{key}}:{{item}}</li>
+		</ul>
+		<ol>
+			<li v-for="i in 10">{{i}}</li>
+		</ol>
 
 		<!-- bind 绑定属性 -->
 		<p v-bind:title="message">绑定属性值</p>
 		<label for="radio"><input type="checkbox" v-model="seen" id="radio">点击切换类名</label>
-		<p v-bind:class="{'red':seen}">切换我的颜色</p>		
+		<p :class="{'red':seen}">切换我的颜色</p>		
 
 		<!-- v-on指令 响应绑定的事件 -->
 		<form id="js-form" action="http://www.baidu.com" method="post">
 			<input type="text" name="tel">
 			<input type="text" name="age">
-			<input type="submit" value="提交" v-on:click.prevent='dialog'>
+			<input type="submit" value="提交" @:click.prevent='dialog'>
 		</form>
 
 		<!-- 用户输入 双向绑定 -->
 		<input type="text" v-model="message">
+
+		<!-- 过滤器 -->
+		{{message|capitalize|firstLow(num)}} <br/><br/>
+
+		<!-- vue.js 计算属性 -->
+		{{addData}}
 	</div>
 	<script>
 	var Vm=new Vue({
 		el:"#app",
 		data:{
-			message:'你好将来',
-			seen:false,
+			message:'hellow future',
+			seen:true,
 			arr:[
 				{'name':'小明','age':'12','sex':'男'},
 				{'name':'小华','age':'13','sex':'女'},
 				{'name':'小李','age':'10','sex':'男'}
-			]
+			],
+			obj:{
+				'name':'清华大学',
+				'url':'www.qinghua.com',
+				'slogn':'德玛西亚'
+			},
+			num:0
 		},
 		methods:{
-			'dialog':function(){
-			
+			'dialog':function(){	
 				if(confirm("确定提交吗")){
 				//	document.getElementById('js-form').submit()
 				}else{
 					return false;
 				}
 			}
+		},
+		filters:{
+			'capitalize':function(val){
+				if(!val) return "";
+				return val.toString().charAt(0).toUpperCase() + val.slice(1);
+			},
+			'firstLow':function(val,arg1){
+				if(!val) return "";
+				return val.toString().charAt(0).toUpperCase()+arg1;			
+			}
+		},
+		computed:{
+			'addData':function(){
+				this.arr.push({'name':'小郑','age':'16','sex':'男'});
+				return this.arr;
+			}
 		}
+	})
+
+	//vm 实例暴露出的接口
+	Vm.$watch('message',function(newVal,oldVal){
+		console.log(1111111111);
 	})
 	</script>
 </body>
