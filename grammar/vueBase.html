@@ -32,7 +32,7 @@
 			<p>还好吧</p>
 			<p>明天怎么样</p>
 		</template>
-		<p v-if="Math.random() > 0.2">{{Math.random()}}</p>
+		<p v-if="random > 0.2">{{random}}</p>
 		<p v-else>没有超过0.2</p>
 
 		<!-- 循环指令 -->
@@ -87,7 +87,8 @@
 				'url':'www.qinghua.com',
 				'slogn':'德玛西亚'
 			},
-			num:0
+			num:0,
+			random:Math.random()
 		},
 		methods:{
 			'dialog':function(){	
