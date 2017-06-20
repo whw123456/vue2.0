@@ -4,21 +4,75 @@
 	<meta charset="UTF-8">
 	<title>vue 1</title>
 	<script src="https://unpkg.com/vue"></script>
+	<style type="text/css">
+		.red{
+			color: red;
+		}
+	</style>
 </head>
 <body>
 	<div id="app">
 		<!-- 模板语法 -->
 		<p>{{message}}</p>
+
+		<!-- 表达式 -->
+		<p>
+			{{5+5}} <br>
+			{{seen?"yes":"no"}} <br>
+			{{message.split("").reverse().join("")}}
+		</p>
+
+		<!-- 指令(带有v-前缀的特殊属性 指令用于在表达式的值改变是将某些行为应用到元素上) -->
+
+		<!-- 条件指令-->
+		<p v-if="seen">现在你看到我了</p>
+		<p v-show="seen">我是一直存在的</p>
+
+		<!-- 循环指令 -->
+		<table>
+			<tr v-for="item in arr">
+				<td>{{item.name}}</td>
+				<td>{{item.age}}</td>
+				<td>{{item.sex}}</td>
+			</tr>
+		</table>	
+
 		<!-- bind 绑定属性 -->
 		<p v-bind:title="message">绑定属性值</p>
-		<!--  -->
-		lalal
+		<label for="radio"><input type="checkbox" v-model="seen" id="radio">点击切换类名</label>
+		<p v-bind:class="{'red':seen}">切换我的颜色</p>		
+
+		<!-- v-on指令 响应绑定的事件 -->
+		<form id="js-form" action="http://www.baidu.com" method="post">
+			<input type="text" name="tel">
+			<input type="text" name="age">
+			<input type="submit" value="提交" v-on:click.prevent='dialog'>
+		</form>
+
+		<!-- 用户输入 双向绑定 -->
+		<input type="text" v-model="message">
 	</div>
 	<script>
 	var Vm=new Vue({
 		el:"#app",
 		data:{
-			message:'你好将来'
+			message:'你好将来',
+			seen:false,
+			arr:[
+				{'name':'小明','age':'12','sex':'男'},
+				{'name':'小华','age':'13','sex':'女'},
+				{'name':'小李','age':'10','sex':'男'}
+			]
+		},
+		methods:{
+			'dialog':function(){
+			
+				if(confirm("确定提交吗")){
+				//	document.getElementById('js-form').submit()
+				}else{
+					return false;
+				}
+			}
 		}
 	})
 	</script>
