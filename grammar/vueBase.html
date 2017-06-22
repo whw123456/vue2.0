@@ -8,6 +8,12 @@
 		.red{
 			color: red;
 		}
+		.active{
+			color:green;
+		}
+		.underLine{
+			text-decoration: underline;
+		}
 	</style>
 </head>
 <body>
@@ -69,7 +75,11 @@
 		{{message|capitalize|firstLow(num)}} <br/><br/>
 
 		<!-- vue.js 计算属性 -->
-		{{addData}}
+		{{message}}
+
+		<!-- vue样式绑定 -->
+		<p :class="{'active':'isActive','underLine':'hasLine'}">来啊给我添加类名啊</p>
+		<p :class="['active','underLine']">来啊给我添加类名啊2</p>
 	</div>
 	<script>
 	var Vm=new Vue({
@@ -77,6 +87,8 @@
 		data:{
 			message:'hellow future',
 			seen:true,
+			isActive:true,
+			hasLine:true,
 			arr:[
 				{'name':'小明','age':'12','sex':'男'},
 				{'name':'小华','age':'13','sex':'女'},
@@ -91,7 +103,8 @@
 			random:Math.random()
 		},
 		methods:{ 
-			'dialog':function(){	
+			'dialog':function(obj){	
+				alert(obj.id);
 				if(confirm("确定提交吗")){
 				//	document.getElementById('js-form').submit()
 				}else{
@@ -110,12 +123,17 @@
 			}
 		},
 		computed:{
-			'addData':function(){
-				this.arr.push({'name':'小郑','age':'16','sex':'男'});
-				return this.arr;
+			'site':{
+				'get':function(){
+					return this.message.split[" "][0]
+				},
+				'set':function(val){
+					this.message=val+this.message;
+				}
 			}
 		}
 	})
+	Vm.site="喊叫"
 
 	//vm 实例暴露出的接口
 	Vm.$watch('message',function(newVal,oldVal){
