@@ -116,12 +116,56 @@
 			capture 事件捕获模式原生js 一样即addEventListener('click',function(){},true)
 			<div @click="greet">子级</div>
 		</div>
+		<!-- 按键修饰符 -->
+		<input type="text" @keyup.ctrl.enter="myKey" @keyup.alt.67="myKey">
+
+		<!-- vue之表单元素 -->
+		<input type="text" v-model="message">
+		<p>{{message}}</p>
+		<textarea id="" v-model="message2" @keyup="myKey" cols="30" rows="10">{{message2}}</textarea>
+		<p>{{message2}}</p>
+
+		<p>单个复选框则为逻辑值</p>
+		<label for="life">life</label>
+		<input v-model="checkArr1" type="checkbox" value="life">
+		<p>{{checkArr1}}</p>
+		<p>多个复选框 绑定至同一个数组</p>
+		<label for="google">google</label>
+		<input v-model="checkArr" type="checkbox" id="google" value="google">
+		<label for="baidu">baidu</label>
+		<input v-model="checkArr" type="checkbox" id="baidu" value="baidu">
+		<label for="ali">ali</label>
+		<input v-model="checkArr" type="checkbox" id="ali" value="ali">
+		<p>{{backTxt(checkArr)}}</p>
+
+		<p>单选框</p>
+		<label for="radio">单选框</label>
+		<input id="radio" type="radio" name="radio" value="单选" v-model="picked" />
+		<label for="radio2">单选框2</label>
+		<input id="radio2" type="radio" name="radio" value="单选2" v-model="picked" />
+		{{picked}}
+
+		<p>下拉列表</p>
+		<select name="first" v-model="selectTxt">
+		    <option value="">选择一个网站</option>
+		    <option value="www.runoob.com">Runoob</option>
+		    <option value="www.google.com">Google</option>
+		</select>
+		<p>{{selectTxt}}</p>	
+		<!-- 表单修饰符 -->
+		<input type="text" v-model.trim='message'>
+		<input type="text" v-model.number.lazy='age'>
+		{{age}}
+
+		<!-- vue之重点组件 -->
 	</div>
 	<script>
 	var Vm=new Vue({
 		el:"#app",
 		data:{
 			message:'hellow future',
+			message2:'sfasdfa',
+			age:12,
 			seen:true,
 			isActive:true,
 			hasLine:true,
@@ -133,18 +177,24 @@
 				{'name':'小华','age':'13','sex':'女'},
 				{'name':'小李','age':'10','sex':'男'}
 			],
+			checkArr:[
+
+			],
+			selectTxt:"",
+			checkArr1:false,
 			obj:{
 				'name':'清华大学',
 				'url':'www.qinghua.com',
 				'slogn':'德玛西亚'
 			},
 			num:0,
-			random:Math.random()
+			random:Math.random(),
+			picked:[]
 		},
 		methods:{ 
 			'dialog':function(obj){
 				if(confirm("确定提交吗")){
-				//	document.getElementById('js-form').submit()
+					//document.getElementById('js-form').submit()
 				}else{
 					return false;
 				}
@@ -158,6 +208,14 @@
 			'greet2':function(mgs){
 				alert(mgs);
 				alert(event.target.innerHTML)
+			},
+			'myKey':function(event){
+				console.log(event.code)
+			},
+			'backTxt':function(txt){
+				if(txt.constructor===Array){
+					return txt.join(',');
+				}		
 			}
 		},
 		filters:{
@@ -187,7 +245,7 @@
 			}
 		}
 	})
-	Vm.site="喊叫"
+	Vm.site="喊叫";
 
 	//vm 实例暴露出的接口
 	Vm.$watch('message',function(newVal,oldVal){
