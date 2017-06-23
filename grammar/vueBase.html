@@ -14,6 +14,21 @@
 		.underLine{
 			text-decoration: underline;
 		}
+		.dangerBg{
+			background:red;
+		}
+		.successBg{
+			background: green;
+		}
+		@keyframes mymove{
+			0% {transform:rotate(0deg);}
+			100% {transform:rotate(360deg);}
+		}
+
+		@-webkit-keyframes mymove{
+			0% {transform:rotate(0deg);}
+			100% {transform:rotate(360deg);}
+		}
 	</style>
 </head>
 <body>
@@ -78,9 +93,29 @@
 		{{message}}
 
 		<!-- vue样式绑定 -->
-		<p :class="{'active':'isActive','underLine':'hasLine'}">来啊给我添加类名啊</p>
+		<p :class="{active:isActive,underLine:hasLine}">来啊给我添加类名啊</p>
 		<p :class="['active','underLine']">来啊给我添加类名啊2</p>
-		<!-- 测试 -->
+		<p :class="['active',seen ? 'underLine' : '']">三元表达式切换样式</p>
+		<p :style="{color:'#ccc','font-size':'20px'}">绑定内联样式</p>
+		<div style="width: 50px;height: 50px; animation:mymove 5s infinite linear;" :class="classObj"></div>
+
+		<!-- 事件处理器 -->
+		<button @click="greet">单机事件</button>
+		<button @click="greet2('你好')">事件传参</button>
+
+		<!-- 事件修饰符 -->
+		<div @click.self="greet" style="padding: 20px">
+			self 只有绑定事件的对象触发  子级不会触发
+			<div>子级</div>
+		</div>
+		<div @click="greet2('你好')" style="padding: 20px">
+			stop 阻止事件冒泡
+			<div @click.stop="greet">子级</div>
+		</div>
+		<div @click.capture="greet2('你好')" style="padding: 20px">
+			capture 事件捕获模式原生js 一样即addEventListener('click',function(){},true)
+			<div @click="greet">子级</div>
+		</div>
 	</div>
 	<script>
 	var Vm=new Vue({
@@ -90,6 +125,9 @@
 			seen:true,
 			isActive:true,
 			hasLine:true,
+			error:{
+				'type':'fatal'
+			},
 			arr:[
 				{'name':'小明','age':'12','sex':'男'},
 				{'name':'小华','age':'13','sex':'女'},
@@ -104,13 +142,22 @@
 			random:Math.random()
 		},
 		methods:{ 
-			'dialog':function(obj){	
-				alert(obj.id);
+			'dialog':function(obj){
 				if(confirm("确定提交吗")){
 				//	document.getElementById('js-form').submit()
 				}else{
 					return false;
 				}
+			},
+			'greet':function(event){
+				//this 指vue实例
+				alert('hellow'+this.arr[0].name)
+				//even 指原生事件对象
+				alert(event.target.innerHTML)
+			},
+			'greet2':function(mgs){
+				alert(mgs);
+				alert(event.target.innerHTML)
 			}
 		},
 		filters:{
@@ -130,6 +177,12 @@
 				},
 				'set':function(val){
 					this.message=val+this.message;
+				}
+			},
+			'classObj':function(){
+				return {
+					'successBg':this.seen&&!this.error,
+					'dangerBg':this.error&&this.error.type==='fatal'
 				}
 			}
 		}
