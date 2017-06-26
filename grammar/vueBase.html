@@ -157,9 +157,28 @@
 		<input type="text" v-model.number.lazy='age'>
 		{{age}}
 
-		<!-- vue之重点组件 -->
+		<!-- vue之重点组件（组件可以扩展html元素，封装可重用代码）
+			语法: Vue.component('tagName',options);
+			注：全局组件必须在实例之前注册，可以应用在所有实例中；局部组件只能应用在当前实例中，如果组件名与全局组件相同会覆盖全局组建；
+			全局组件和局部组件命名规则不能使用驼峰命名法，否则报错
+		-->
+		<runoobchild></runoobchild>
+		<runoob></runoob>
+		
+		<!-- prop 是父组件用来传递数据的特殊属性 -->
+		
+	</div>
+	<div id="app2">
+		<runoob></runoob>
 	</div>
 	<script>
+	//注册全局组件 注: 全局组件注册时必须在Vue实例之前 全局组建可以在所有示例中使用
+	Vue.component('runoob',{
+		template:'<h1>你好啊，将来</h1>'
+	})
+	var Vm2=new Vue({
+		el:"#app2",
+	})
 	var Vm=new Vue({
 		el:"#app",
 		data:{
@@ -243,14 +262,20 @@
 					'dangerBg':this.error&&this.error.type==='fatal'
 				}
 			}
+		},
+		components:{//注册局部组件 注：局部组件只能在当前实例中使用
+			runoobchild:{
+				template:'<i>我是子组件</i>'
+			}
 		}
 	})
 	Vm.site="喊叫";
-
 	//vm 实例暴露出的接口
 	Vm.$watch('message',function(newVal,oldVal){
 		console.log(1111111111);
 	})
+
+
 	</script>
 </body>
 </html>
