@@ -1,0 +1,1 @@
+http://www.runoob.com/vue2/vue-component.html //关于组件props 的详细介绍
