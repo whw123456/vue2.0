@@ -167,10 +167,15 @@
 		<i is="runoobchild" v-for="item in arr" :key="item" :title="item.name"></i>
 
 		<!-- 注：如果想传递真正的js数值 需要以bind形式绑定 -->
-		<runoob :messagewws='12' ></runoob>
+		<runoob :messagewws='message' ></runoob>
 		
 		<!-- prop 是父组件用来传递数据的特殊属性 -->
-		
+		<template id="my-tem">
+			<input type="text" v-model="message">
+		</template>
+		<br>
+		<!-- props 自定义事件 -->
+		<ipt :msg="message" @bakdata="changeMgs"></ipt>
 	</div>
 	<div id="app2">
 		
@@ -179,15 +184,31 @@
 	</div>
 	<script>
 	//注册全局组件 注: 全局组件注册时必须在Vue实例之前 全局组建可以在所有示例中使用
+	//单向绑定 父传子
 	Vue.component('runoob',{
 		props:{
 			messagewws:{
-				type:Number,
+				type:[Number,String],
 			}
 		},
 		template:'<h1>{{messagewws}}</h1>'
 	})
-
+	Vue.extend({
+		data:function(){
+			return {'message':'llllllllllllll'}
+		},
+		template:'#my-tem',
+	})
+	// 双向绑定
+	Vue.component('ipt',{
+		props:['msg'],
+		template:'<input :value="msg" type="text" @keyup="bakdata" />',
+		methods:{
+			'bakdata':function(){			
+				this.$emit('bakdata',event.target.value);
+			}
+		}
+	})
 	var Vm=new Vue({
 		el:"#app",
 		data:{
@@ -235,7 +256,7 @@
 			},
 			'greet2':function(mgs){
 				alert(mgs);
-				alert(event.target.innerHTML)
+				alert(event.target.innerHTML);
 			},
 			'myKey':function(event){
 				console.log(event.code)
@@ -244,6 +265,9 @@
 				if(txt.constructor===Array){
 					return txt.join(',');
 				}		
+			},
+			'changeMgs':function(txt){
+				this.message=txt
 			}
 		},
 		filters:{
